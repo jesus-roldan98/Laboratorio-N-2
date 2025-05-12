@@ -37,7 +37,7 @@ SPDX-License-Identifier: MIT
 /* === Public variable definitions ================================================================================= */
 
 static const struct alumno_s YO = {
-    .nombre = "Jesús",
+    .nombre = "Jesus",
     .apellido = "Roldan",
     .documento = 41374430
 };
@@ -49,7 +49,7 @@ int main(void) {
     char buffer[100];
     int resultado;
 
-    Serializar (&YO, buffer, sizeof (buffer));
+    resultado = Serializar (&YO, buffer, sizeof (buffer));
     if (resultado > 0) {
         printf ("Serializado: %s\n", buffer);
 

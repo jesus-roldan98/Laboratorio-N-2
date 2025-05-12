@@ -31,16 +31,30 @@ SPDX-License-Identifier: MIT
 /* === Private data type declarations ============================================================================== */
 
 /* === Private function declarations =============================================================================== */
+
 /*
 * @brief
 *
-*@param campo
-*@param valor
-*@param buffer
-*@param disponibles
-*@return int
+*@param campo estruct de apellido, nombre y documento
+*@param valor el valor del parametro a analizar en este caso nombre o apellido
+*@param buffer donde escribira el puntero
+*@param disponibles espacio disponible en la cadena
+*@return int devuelve un -1 si el espacio asignado es menor de los que se escribio en la cadena, sino devuelve la suma de todos los caracteres que ocupan espacio en la cadena
 */
+
 static int SerializarCadena(char campo[], const char valor[], char buffer[], uint32_t disponibles);
+
+/*
+* @brief
+*
+*@param campo estruct de apellido, nombre y documento
+*@param valor el valor del parametro a analizar en este caso documento
+*@param buffer donde escribira el puntero
+*@param disponibles espacio disponible en la cadena
+*@return int devuelve un -1 si el espacio asignado es menor de los que se escribio en la cadena, sino devuelve la suma de todos los caracteres que ocupan espacio en la cadena
+*/
+
+static int SerializarDocumento(char campo[], uint32_t valor, char buffer[], uint32_t disponibles);
 
 /* === Private variable definitions ================================================================================ */
 
@@ -52,6 +66,9 @@ int SerializarCadena(char campo[], const char valor[], char buffer[], uint32_t d
     return snprintf(buffer, disponibles, "\"%s\":\"%s\",", campo, valor);
 }
 
+int SerializarDocumento(char campo[], uint32_t valor, char buffer[], uint32_t disponibles) {
+    return snprintf(buffer, disponibles, "\"%s\":\"%u\"}", campo, valor);
+}
 /* === Public function implementation ============================================================================== */
 
 int Serializar(const alumno_t alumno, char buffer[], uint32_t size) {
@@ -62,14 +79,24 @@ int Serializar(const alumno_t alumno, char buffer[], uint32_t size) {
     buffer++;
     escritos = 1;
     resultado = SerializarCadena("nombre", alumno->nombre, buffer, size - escritos);
-    if (resultado < 0) {
+    if (resultado < 0 || resultado >= size - escritos) {
         return -1;
     }
 
-    buffer = buffer + escritos;
+    buffer = buffer + resultado;
     escritos = escritos + resultado;
-    escritos = escritos + SerializarCadena("apellido", alumno->apellido, buffer, size - escritos);
-    
+    resultado = SerializarCadena("apellido", alumno->apellido, buffer, size - escritos);
+    if (resultado < 0 || resultado >= size - escritos) {
+        return -1;
+    }
+
+    buffer = buffer + resultado;
+    escritos = escritos + resultado;
+    resultado = SerializarDocumento("documento", alumno->documento, buffer, size-escritos);
+    if (resultado < 0 || resultado >= size - escritos) {
+        return -1;
+    }
+    escritos = escritos + resultado;
     return escritos;
 }
 

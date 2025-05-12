@@ -28,3 +28,9 @@ doc:
 	@echo "Generating documentation..."
 	@mkdir -p $(DOC_DIR)
 	@doxygen Doxyfile
+	
+execute: all
+	@mkdir -p $(DOC_DIR)
+	@$(BIN_DIR)/app.out
+	
+
