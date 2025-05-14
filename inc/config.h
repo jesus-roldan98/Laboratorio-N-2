@@ -17,16 +17,14 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 SPDX-License-Identifier: MIT
 *********************************************************************************************************************/
 
-#ifndef ALUMNO_H_
-#define ALUMNO_H_
+#ifndef PLANTILLA_H_
+#define PLANTILLA_H_
 
-/** @file alumno.h
- ** @brief declaración del módulo para la gestión de alumnos
+/** @file plantilla.h
+ ** @brief Plantilla para la creación de archivos de de cabeceras en lenguaje C
  **/
 
 /* === Headers files inclusions ==================================================================================== */
-
-#include <stdint.h>
 
 /* === Header for C++ compatibility ================================================================================ */
 
@@ -35,35 +33,19 @@ extern "C" {
 #endif
 
 /* === Public macros definitions =================================================================================== */
+#define MEMORIA_ESTATICA_ACTIVA 1 //!< si el valor es 1 entonces se usara memoria estatica, sino usara memoria dinamica
+#if (MEMORIA_ESTATICA_ACTIVA) == 1
+#define USAR_MEMORIA_ESTATICA 
+#endif
+#ifdef USAR_MEMORIA_ESTATICA
+#define ALUMNO_MAX 2 //!< cantidad maxima de alumnos
+#endif
 
 /* === Public data type declarations =============================================================================== */
-
-//! Estructura que representa un alumno
-typedef struct alumno_s * alumno_t;
 
 /* === Public variable declarations ================================================================================ */
 
 /* === Public function declarations ================================================================================ */
-/*
-    * @brief Función para crear un nuevo alumno
-    *
-    * @param nombre      Nombre del alumno
-    * @param apellido    Apellido del alumno
-    * @param documento   Número de documento del alumno
-    * @return alumno_t   Referencia al nuevo alumno creado
-    */
-
-alumno_t AlumnoCrear(char * nombre, char * apellido, uint32_t documento);
-
-/*
- * @brief Función para serealizar los datos de un alumno
- *
- * @param alumno referencia al alumno a serializar
- * @param buffer cadena de caracteres donde se almacena los datos serializados
- * @param alumno espacio disponible en la cadena de caracteres escritos en el buffer dara un resultado o -1 si hubo un
- * error
- */
-int AlumnoSerializar(alumno_t alumno, char buffer[], uint32_t size);
 
 /* === End of conditional blocks =================================================================================== */
 
@@ -71,4 +53,4 @@ int AlumnoSerializar(alumno_t alumno, char buffer[], uint32_t size);
 }
 #endif
 
-#endif /* ALUMNO_H_ */
+#endif /* CONFIG_H_ */

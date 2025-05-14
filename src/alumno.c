@@ -25,12 +25,29 @@ SPDX-License-Identifier: MIT
 
 #include "alumno.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include "config.h"
 
 /* === Macros definitions ========================================================================================== */
 
 /* === Private data type declarations ============================================================================== */
 
+struct alumno_s {
+    char nombre[20];    //!< Nombre del alumno
+    char apellido[20];  //!< apellido del alumno
+    uint32_t documento; //!< documento del alumno
+#ifdef USAR_MEMORIA_ESTATICA
+    
+    bool ocupado;     //!< indica si la instancia esta ocupada
+
+#endif
+};
+
 /* === Private function declarations =============================================================================== */
+
+static alumno_t CrearInstancia(void);
 
 /*
 * @brief
@@ -58,9 +75,29 @@ static int SerializarDocumento(char campo[], uint32_t valor, char buffer[], uint
 
 /* === Private variable definitions ================================================================================ */
 
+#ifdef USAR_MEMORIA_ESTATICA
+
+static struct alumno_s instancias [ALUMNO_MAX] = {0}; //!< Instancia de la estructura alumno_s
+
+#endif
 /* === Public variable definitions ================================================================================= */
 
 /* === Private function definitions ================================================================================ */
+#ifdef USAR_MEMORIA_ESTATICA
+alumno_t CrearInstancia(void) {
+    alumno_t self = NULL;
+
+    for (int i = 0; i < ALUMNO_MAX; i++) {
+        if (!instancias[i].ocupado) {
+            instancias[i].ocupado = true;
+            self = &instancias[i];
+            break;
+        }
+    }
+    return self;
+
+}
+#endif
 
 int SerializarCadena(char campo[], const char valor[], char buffer[], uint32_t disponibles) {
     return snprintf(buffer, disponibles, "\"%s\":\"%s\",", campo, valor);
@@ -69,30 +106,46 @@ int SerializarCadena(char campo[], const char valor[], char buffer[], uint32_t d
 int SerializarDocumento(char campo[], uint32_t valor, char buffer[], uint32_t disponibles) {
     return snprintf(buffer, disponibles, "\"%s\":\"%u\"}", campo, valor);
 }
-/* === Public function implementation ============================================================================== */
+/* === Public function definitions ============================================================================== */
 
-int Serializar(const alumno_t alumno, char buffer[], uint32_t size) {
+alumno_t AlumnoCrear(char * nombre, char * apellido, uint32_t dni) {
+
+#ifdef USAR_MEMORIA_ESTATICA 
+    alumno_t self = CrearInstancia();
+#else 
+    alumno_t self = malloc(sizeof(struct alumno_s));
+#endif
+    if (self != NULL) {
+        self ->documento = dni;
+        strncpy(self ->nombre, nombre, sizeof(self ->nombre) - 1);
+        strncpy(self ->apellido, apellido, sizeof(self ->apellido) - 1);
+    }
+
+    return self;
+}
+
+int AlumnoSerializar(alumno_t self, char buffer[], uint32_t size) {
     int escritos;
     int resultado;
 
     buffer[0] = '{';
     buffer++;
     escritos = 1;
-    resultado = SerializarCadena("nombre", alumno->nombre, buffer, size - escritos);
+    resultado = SerializarCadena("nombre", self->nombre, buffer, size - escritos);
     if (resultado < 0 || resultado >= size - escritos) {
         return -1;
     }
 
     buffer = buffer + resultado;
     escritos = escritos + resultado;
-    resultado = SerializarCadena("apellido", alumno->apellido, buffer, size - escritos);
+    resultado = SerializarCadena("apellido", self->apellido, buffer, size - escritos);
     if (resultado < 0 || resultado >= size - escritos) {
         return -1;
     }
 
     buffer = buffer + resultado;
     escritos = escritos + resultado;
-    resultado = SerializarDocumento("documento", alumno->documento, buffer, size-escritos);
+    resultado = SerializarDocumento("documento", self->documento, buffer, size-escritos);
     if (resultado < 0 || resultado >= size - escritos) {
         return -1;
     }

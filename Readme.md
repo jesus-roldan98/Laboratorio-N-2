@@ -4,37 +4,44 @@
 
 ### Ejercicio a Desarrollar
 
-**Se deberá crear un repositorio git con acceso público que tenga el código fuente de un proyecto
-en C que cumpla con los siguientes requisitos:**
+Se deberá crear un repositorio git con acceso público que tenga el código fuente de un proyecto
+en C que cumpla con los siguientes requisitos:
 
-• Se definirá un archivo makefile para poder compilar el proyecto con el comando make all.
+- Se definirá un archivo de makefile para poder compilar el proyecto con el comando make
+all.
 
-• Todo el código fuente (archivos .c) deberá ubicarse en la carpeta src mientras que los archivos de cabeceras y (archivos.h) se deberán ubicar en la carpeta inc.
+- Todo el código fuente (archivos .c y .h) deberá ubicarse en la carpeta src.
 
-• El ejecutable deberá ubicarse en la carpeta build/bin y los archivos objeto intermedios en
+- El ejecutable deberá ubicarse en la carpeta build/bin y los archivos objeto intermedios en
 la carpeta build/obj.
 
-• El programa principal estará compuesto solo por la función main, que se ubicará en el archivo
+- El programa principal estará compuesto solo por la función main, que se ubicará en el archivo
 main.c.
 
-• El programa principal mostrará por pantalla los datos del alumno en formato JSON utilizando
-la función Serializar del módulo alumno.
+- El programa mostrará por pantalla los datos del alumno en formato JSON utilizando la función
+serializar del modulo alumno.
 
-• En el módulo alumno se definirá un tipo de datos correspondiente una estructura con la
-información personal de un alumno: nombre, apellido y documento.
+- La estructura de dato con los atributos de un alumno (nombre, apellido y documento) deberá
+ser privada del archivo alumno.c.
 
-• En el módulo alumno se definirá tambien una función Serializar que recibirá como parámetros un puntero a una estructura constante con los datos del alumno, una cadena de
-caracteres para generar el resultado y la cantidad de bytes disponibles en la cadena de resultado. La función deberá retornar la longitud de la cadena generada, o -1 si el espacio no
-es suficiente.
+- En el archivo alumno.h se definirá una función CrearAlumno que recibirá como parámetros
+una cadena con el apellido, una cadena con el nombre y el documento del alumno a crear. La
+función retorna un puntero a la estructura de datos asignada para almacenar los datos del
+alumno, o el puntero nulo si no se pudo crear la estructura.
 
-• El módulo alumno tendrá además dos funciones internas para serializar los campos de texto
-y numéricos. La función pública Serializar utilizará estas funciones interna.
+- Se deberá poder crear alumnos en forma estática o dinámica. Para esto se pueden plantear
+dos soluciones: dos funciones diferentes con los mismos parámetros o compilación condicional utilizando las funciones del preprocesador.
 
-• Se documentará todo el código utilizando doxygen. El comando make doc deberá generar la
+- En el archivo alumno.h se definirá una función SerializarAlumno que recibirá como parámetros un puntero a la estructura con los datos alumno, un puntero un vector de caracteres
+para generar el resultado y la cantidad de bytes disponibles en la cadena de resultado. La
+función retorna la longitud de la cadena generada, o -1 si el espacio no es suficiente.
+
+- El modulo alumno tendrá dos función internas para serializar los campos de texto y numéricos. La función serializar utilizará estas funciones interna.
+
+- Se documentará todo el código utilizando doxygen. El comando make doc deberá generar la
 documentación en HTML en la carpeta build/doc.
 
-• Se deberá mantener un formato consistente en todo el código desarrollado (posición de llaves, formatos de identificadores y niveles de identado).
+- Se deberá mantener un formato consistente en todo el código desarrollado (posición de llaves, formatos de identificadores y niveles de identado).
 
-• Se deberá evitar la repetición de código utilizando, adecuadamente, macros y archivos de
+- Se deberá evitar la repetición de código utilizando, adecuadamente, macros y archivos de
 cabecera.
-

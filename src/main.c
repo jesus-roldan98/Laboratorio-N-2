@@ -36,12 +36,6 @@ SPDX-License-Identifier: MIT
 
 /* === Public variable definitions ================================================================================= */
 
-static const struct alumno_s YO = {
-    .nombre = "Jesus",
-    .apellido = "Roldan",
-    .documento = 41374430
-};
-
 /* === Private function definitions ================================================================================ */
 
 /* === Public function implementation ============================================================================== */
@@ -49,7 +43,18 @@ int main(void) {
     char buffer[100];
     int resultado;
 
-    resultado = Serializar (&YO, buffer, sizeof (buffer));
+    alumno_t jesus = AlumnoCrear("Jesus", "Roldan", 41374430);
+    alumno_t laplace = AlumnoCrear("Loco", "Laplace", 12345678);
+
+    resultado = AlumnoSerializar(jesus, buffer, sizeof(buffer));
+    if (resultado > 0) {
+        printf ("Serializado: %s\n", buffer);
+
+    }else {
+        printf ("Error al serializar\n");
+        // Hubo un error al serializar  
+    }
+    resultado = AlumnoSerializar(laplace, buffer, sizeof(buffer));
     if (resultado > 0) {
         printf ("Serializado: %s\n", buffer);
 
