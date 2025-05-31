@@ -25,6 +25,7 @@ SPDX-License-Identifier: MIT
 
 #include "alumno.h"
 #include <stdio.h>
+#include <calculadora.h>
 
 /* === Macros definitions ========================================================================================== */
 
@@ -39,29 +40,40 @@ SPDX-License-Identifier: MIT
 /* === Private function definitions ================================================================================ */
 
 /* === Public function implementation ============================================================================== */
+
+/**
+ * @brief Función principal del programa.
+ *
+ * Se crea una instancia de calculadora, se registran las operaciones básicas (+, -, *) y luego
+ * se evalúan tres expresiones aritméticas como ejemplo.
+ *
+ * @return 0 al finalizar correctamente.
+ */
+
 int main(void) {
-    char buffer[100];
+    // Expresiones a evaluar
+    static const char suma [] = "22+33";
+    static const char resta [] = "5+4";
+    static const char multiplicacion [] = "2*1";
+    static const char division [] = "10/2"; 
+     // Variable para almacenar los resultados (no necesaria si solo se imprime)
     int resultado;
 
-    alumno_t jesus = AlumnoCrear("Jesus", "Roldan", 41374430);
-    alumno_t laplace = AlumnoCrear("Loco", "Laplace", 12345678);
+    // Crear la calculadora
+    calculadora_t calculadora = CalculadoraCrear();
+    CalculadoraAddOperacion(calculadora, '+', OperacionAdd);
+    CalculadoraAddOperacion(calculadora, '-', OperacionSub);
+    CalculadoraAddOperacion(calculadora, '*', OperacionMul);
+    CalculadoraAddOperacion(calculadora, '/', OperacionDiv);
 
-    resultado = AlumnoSerializar(jesus, buffer, sizeof(buffer));
-    if (resultado > 0) {
-        printf ("Serializado: %s\n", buffer);
+    // Evaluar expresiones y mostrar resultados
 
-    }else {
-        printf ("Error al serializar\n");
-        // Hubo un error al serializar  
-    }
-    resultado = AlumnoSerializar(laplace, buffer, sizeof(buffer));
-    if (resultado > 0) {
-        printf ("Serializado: %s\n", buffer);
-
-    }else {
-        printf ("Error al serializar\n");
-        // Hubo un error al serializar  
-    }
+    printf ("Resultado de la suma: %d\n", CalculadoraCalcula(calculadora, suma));
+    printf ("Resultado de la resta: %d\n", CalculadoraCalcula(calculadora, resta));
+    printf ("Resultado de la multiplicacion: %d\n", CalculadoraCalcula(calculadora, multiplicacion));
+    printf ("Resultado de la division: %d\n", CalculadoraCalcula(calculadora, division));
+    
     return 0;
+
 }
 /* === End of documentation ======================================================================================== */
